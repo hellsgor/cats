@@ -11,7 +11,7 @@
   width: fit-content;
 }
 
-.button:hover {
+.button:not(:disabled):hover {
   border-color: #000;
   background-color: #fff;
 }
@@ -19,6 +19,11 @@
 .button:focus,
 .button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button_wide {
