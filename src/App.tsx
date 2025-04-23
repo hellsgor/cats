@@ -24,7 +24,7 @@ export default function App() {
         onChange={() => setRefresh({ ...refresh, auto: !refresh.auto })}
       />
       <Button wide={true} disabled={!isEnabled}>
-        Gat cat
+        Get cat
       </Button>
     </Card>
   );
