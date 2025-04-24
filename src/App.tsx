@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { useCallback, useState } from "react";
+import Card from "./components/Card";
+import Checkbox from "./components/Checkbox";
+import Button from "./components/Button";
+import Cat from "./components/Cat";
+import { useQuery } from "@tanstack/react-query";
+import { catsApi } from "./api/cats";
+import { queryClient } from "./api/query-client";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [isEnabled, setIsEnabled] = useState<boolean>(true);
+  const [autoRefresh, setAutoRefresh] = useState({
+    auto: false,
+    delay: 5000,
+  });
 
+  const { data, error, isFetching } = useQuery({
+    queryKey: ["cats", "random"],
+    queryFn: (meta) => catsApi.getRandomCat(meta),
+    enabled: isEnabled,
+    refetchOnWindowFocus: false,
+    refetchInterval: autoRefresh.auto ? autoRefresh.delay : false,
+  });
+
+  const handleClick = useCallback(
+    () =>
+      queryClient.invalidateQueries({
+        queryKey: ["cats", "random"],
+      }),
+    [],
+  );
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Card>
+      <Checkbox
+        text={"Enabled"}
+        checked={isEnabled}
+        onChange={() => setIsEnabled(!isEnabled)}
+      />
+      <Checkbox
+        text={`Auto-refresh every ${autoRefresh.delay / 1000} seconds`}
+        checked={autoRefresh.auto}
+        onChange={() =>
+          setAutoRefresh({ ...autoRefresh, auto: !autoRefresh.auto })
+        }
+      />
+      <Button wide={true} disabled={!isEnabled} onClick={handleClick}>
+        Get cat
+      </Button>
+      <Cat data={data} isFetching={isFetching} error={error || undefined} />
+    </Card>
+  );
 }
-
-export default App

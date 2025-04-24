@@ -1,0 +1,32 @@
+.cat {
+  width: 100%;
+  height: 200px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__loader,
+  &__error {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    translate: 0 -50%;
+  }
+
+  &__loader {
+    color: gray;
+  }
+
+  &__error {
+    color: red;
+  }
+}

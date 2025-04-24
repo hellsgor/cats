@@ -1,54 +1,140 @@
-# React + TypeScript + Vite
+# Приложение "Cats Viewer"
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+"**Cats Viewer**" — это приложение для просмотра случайных фотографий котиков. Оно позволяет пользователю загружать новые изображения, включать или отключать автоматическое обновление, а также управлять состоянием загрузки. Приложение разработано с использованием современных технологий и демонстрирует подходы к работе с состоянием, запросами к API и стилизацией компонентов.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Функциональность
 
-## Expanding the ESLint configuration
+- **Загрузка случайных фотографий котиков**: Нажмите кнопку "Get cat", чтобы загрузить новое изображение.
+- **Автоматическое обновление**: Включите опцию "Auto-refresh", чтобы изображения обновлялись каждые 5 секунд.
+- **Управление состоянием загрузки**: Приложение отображает индикатор загрузки, пока данные не будут получены.
+- **Обработка ошибок**: Если загрузка изображения не удалась, пользователь увидит сообщение об ошибке.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Стек технологий
+
+- **React** — библиотека для создания пользовательских интерфейсов.
+- **TypeScript** — язык программирования с поддержкой статической типизации.
+- **Vite** — инструмент для быстрого сборки и разработки.
+- **React Query** — библиотека для управления состоянием данных и запросами к API.
+- **Styled Components** — библиотека для стилизации компонентов.
+- **Sass** — препроцессор CSS для более удобной работы со стилями.
+- **clsx** — утилита для удобного управления классами CSS.
+
+---
+
+## Почему стили написаны по-разному?
+
+В проекте используются разные подходы к стилизации компонентов, чтобы продемонстрировать их возможности:
+
+1. **CSS-модули** (например, в `Button`):
+   - Используются для изоляции стилей и предотвращения конфликтов.
+   - Простой и эффективный способ стилизации.
+
+2. **Styled Components** (например, в `Checkbox`):
+   - Позволяют писать стили прямо в JavaScript/TypeScript.
+   - Удобны для создания динамических стилей, зависящих от пропсов.
+
+3. **Sass** (например, в `Cat`):
+   - Используется для глобальных стилей и работы с вложенностью.
+   - Подходит для компонентов с более сложной структурой.
+
+---
+
+## Использование React Query
+
+В проекте используется **React Query** для управления запросами к API. Это позволяет:
+
+- **Кэшировать данные**: Повторные запросы к одному и тому же ресурсу выполняются быстрее.
+- **Управлять состоянием загрузки**: React Query предоставляет флаги `isFetching`, `isLoading` и `error`.
+- **Обновлять данные автоматически**: Например, включение автообновления изображений реализовано через `refetchInterval`.
+
+Пример использования React Query в проекте:
+
+```tsx
+const { data, error, isFetching } = useQuery({
+  queryKey: ["cats", "random"],
+  queryFn: ({ signal }) => catsApi.getRandomCat({ signal }),
+  enabled: isEnabled,
+  refetchOnWindowFocus: false,
+  refetchInterval: autoRefresh.auto ? autoRefresh.delay : false,
+});
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Скрипты проекта
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
+- `npm run dev` — запуск проекта в режиме разработки.
+- `npm run build` — сборка проекта для продакшена.
+- `npm run preview` — предпросмотр собранного проекта.
+- `npm run lint` — запуск линтера для проверки кода.
+- `npm run deploy` — деплой проекта на GitHub Pages.
+
+---
+
+## Установка и запуск
+
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/hellsgor/cats.git
+   cd cats
+   ```
+
+2. Установите зависимости:
+   ```bash
+   npm install
+   ```
+
+3. Запустите проект в режиме разработки:
+   ```bash
+   npm run dev
+   ```
+
+4. Для сборки проекта:
+   ```bash
+   npm run build
+   ```
+
+5. Для деплоя на GitHub Pages:
+   ```bash
+   npm run deploy
+   ```
+
+---
+
+## API
+
+Приложение использует [The Cat API](https://thecatapi.com/) для получения случайных изображений котиков. Все запросы к API находятся в файле `src/api/cats.ts`.
+
+Пример запроса:
+
+```typescript
+export const catsApi = {
+  getRandomCat: async ({ signal }: { signal: AbortSignal }) => {
+    return fetch(`${BASE_URL}/search`, { signal }).then(
+      (response) => response.json() as Promise<CatDto[]>,
+    );
   },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+};
 ```
+
+---
+
+## Структура проекта
+
+- **src/** — основная папка с исходным кодом:
+  - **components/** — компоненты React (`Button`, `Card`, `Checkbox`, `Cat`).
+  - **api/** — функции для работы с API.
+  - **App.tsx** — главный компонент приложения.
+- **public/** — статические файлы.
+- **README.md** — документация проекта.
+- **package.json** — конфигурация проекта.
+
+---
+
+## Контакты
+
+Если у вас есть вопросы или предложения, вы можете связаться через [GitHub](https://github.com/hellsgor/cats).
