@@ -1,11 +1,30 @@
 .cat {
   width: 100%;
   height: 200px;
+  border-radius: 4px;
+  overflow: hidden;
 
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  &__loader,
+  &__error {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__loader {
+    color: gray;
+  }
+
+  &__error {
+    color: red;
   }
 }
