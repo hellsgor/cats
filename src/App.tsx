@@ -3,6 +3,7 @@ import { useState } from "react";
 import Card from "./components/Card";
 import Checkbox from "./components/Checkbox";
 import Button from "./components/Button";
+import Cat from "./components/Cat";
 
 export default function App() {
   const [isEnabled, setIsEnabled] = useState<boolean>(true);
@@ -26,6 +27,7 @@ export default function App() {
       <Button wide={true} disabled={!isEnabled}>
         Get cat
       </Button>
+      <Cat />
     </Card>
   );
 }
