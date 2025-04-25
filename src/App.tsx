@@ -4,9 +4,8 @@ import Card from "./components/Card";
 import Checkbox from "./components/Checkbox";
 import Button from "./components/Button";
 import Cat from "./components/Cat";
-import { useQuery } from "@tanstack/react-query";
-import { catsApi } from "./api/cats";
 import { queryClient } from "./api/query-client";
+import { useCatData } from "./hooks/useCatData";
 
 export default function App() {
   const [isEnabled, setIsEnabled] = useState<boolean>(true);
@@ -15,13 +14,7 @@ export default function App() {
     delay: 5000,
   });
 
-  const { data, error, isFetching } = useQuery({
-    queryKey: ["cats", "random"],
-    queryFn: (meta) => catsApi.getRandomCat(meta),
-    enabled: isEnabled,
-    refetchOnWindowFocus: false,
-    refetchInterval: autoRefresh.auto ? autoRefresh.delay : false,
-  });
+  const { data, error, isFetching } = useCatData({ isEnabled, autoRefresh });
 
   const handleClick = useCallback(
     () =>
