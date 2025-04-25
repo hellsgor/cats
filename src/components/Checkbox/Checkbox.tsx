@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styled from "styled-components";
 
 interface CheckboxProps {
@@ -43,10 +44,16 @@ const CheckboxContainer = styled.label`
   }
 `;
 
-export const Checkbox = ({ text, checked, onChange }: CheckboxProps) => (
-  <CheckboxContainer>
-    <HiddenCheckbox checked={checked} onChange={onChange} />
-    <StyledCheckbox checked={checked} />
-    <span>{text}</span>
-  </CheckboxContainer>
-);
+export const Checkbox = memo(function Checkbox({
+  text,
+  checked,
+  onChange,
+}: CheckboxProps) {
+  return (
+    <CheckboxContainer>
+      <HiddenCheckbox checked={checked} onChange={onChange} />
+      <StyledCheckbox checked={checked} />
+      <span>{text}</span>
+    </CheckboxContainer>
+  );
+});

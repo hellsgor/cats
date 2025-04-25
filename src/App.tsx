@@ -30,19 +30,26 @@ export default function App() {
       }),
     [],
   );
+
+  const handleEnabledChange = useCallback(() => {
+    setIsEnabled((prev) => !prev);
+  }, []);
+
+  const handleAutoRefreshChange = useCallback(() => {
+    setAutoRefresh((prev) => ({ ...prev, auto: !prev.auto }));
+  }, []);
+
   return (
     <Card>
       <Checkbox
         text={"Enabled"}
         checked={isEnabled}
-        onChange={() => setIsEnabled(!isEnabled)}
+        onChange={handleEnabledChange}
       />
       <Checkbox
         text={`Auto-refresh every ${autoRefresh.delay / 1000} seconds`}
         checked={autoRefresh.auto}
-        onChange={() =>
-          setAutoRefresh({ ...autoRefresh, auto: !autoRefresh.auto })
-        }
+        onChange={handleAutoRefreshChange}
       />
       <Button wide={true} disabled={!isEnabled} onClick={handleClick}>
         Get cat
