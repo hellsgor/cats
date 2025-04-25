@@ -1,6 +1,6 @@
 import "./cat.scss";
 import { CatDto } from "../../api/cats";
-import { FC } from "react";
+import { FC, memo } from "react";
 
 export interface CatProps {
   data: CatDto[] | undefined;
@@ -8,7 +8,11 @@ export interface CatProps {
   error?: Error;
 }
 
-export const Cat: FC<CatProps> = ({ data, isFetching, error }) => {
+export const Cat: FC<CatProps> = memo(function Cat({
+  data,
+  isFetching,
+  error,
+}) {
   return (
     <div className="cat">
       {error && <div className="cat__error">{`Failed to load image`}</div>}
@@ -23,4 +27,4 @@ export const Cat: FC<CatProps> = ({ data, isFetching, error }) => {
       )}
     </div>
   );
-};
+});

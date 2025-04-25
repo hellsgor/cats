@@ -4,9 +4,8 @@ import Card from "./components/Card";
 import Checkbox from "./components/Checkbox";
 import Button from "./components/Button";
 import Cat from "./components/Cat";
-import { useQuery } from "@tanstack/react-query";
-import { catsApi } from "./api/cats";
 import { queryClient } from "./api/query-client";
+import { useCatData } from "./hooks/useCatData";
 
 export default function App() {
   const [isEnabled, setIsEnabled] = useState<boolean>(true);
@@ -15,13 +14,7 @@ export default function App() {
     delay: 5000,
   });
 
-  const { data, error, isFetching } = useQuery({
-    queryKey: ["cats", "random"],
-    queryFn: (meta) => catsApi.getRandomCat(meta),
-    enabled: isEnabled,
-    refetchOnWindowFocus: false,
-    refetchInterval: autoRefresh.auto ? autoRefresh.delay : false,
-  });
+  const { data, error, isFetching } = useCatData({ isEnabled, autoRefresh });
 
   const handleClick = useCallback(
     () =>
@@ -30,19 +23,26 @@ export default function App() {
       }),
     [],
   );
+
+  const handleEnabledChange = useCallback(() => {
+    setIsEnabled((prev) => !prev);
+  }, []);
+
+  const handleAutoRefreshChange = useCallback(() => {
+    setAutoRefresh((prev) => ({ ...prev, auto: !prev.auto }));
+  }, []);
+
   return (
     <Card>
       <Checkbox
         text={"Enabled"}
         checked={isEnabled}
-        onChange={() => setIsEnabled(!isEnabled)}
+        onChange={handleEnabledChange}
       />
       <Checkbox
         text={`Auto-refresh every ${autoRefresh.delay / 1000} seconds`}
         checked={autoRefresh.auto}
-        onChange={() =>
-          setAutoRefresh({ ...autoRefresh, auto: !autoRefresh.auto })
-        }
+        onChange={handleAutoRefreshChange}
       />
       <Button wide={true} disabled={!isEnabled} onClick={handleClick}>
         Get cat

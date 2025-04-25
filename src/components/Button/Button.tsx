@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonHTMLAttributes, memo, ReactNode } from "react";
 import classes from "./Button.module.css";
 import clsx from "clsx";
 
@@ -8,7 +8,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   wide?: boolean;
 }
 
-export function Button({
+export const Button = memo(function Button({
   className,
   children,
   wide = false,
@@ -22,4 +22,4 @@ export function Button({
       {children}
     </button>
   );
-}
+});
